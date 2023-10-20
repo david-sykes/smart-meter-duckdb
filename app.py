@@ -10,6 +10,6 @@ con.sql(f"CREATE TABLE readings as SELECT * FROM '{data_path}';")
 ## App
 st.title('Test app')
 ids = con.sql("SELECT DISTINCT(LCLid) as ids FROM readings;").df()
-selected_id = st.multiselect("select id", ids['ids'])
+selected_id = st.selectbox("select id", ids['ids'])
 df = con.sql(f"SELECT * FROM readings WHERE LCLid = {selected_id};").df()
 st.dataframe(df)
