@@ -5,6 +5,9 @@ name = "pypi"
 
 [packages]
 streamlit = "*"
+duckdb = "*"
+pandas = "*"
+plotly = "*"
 
 [dev-packages]
 
