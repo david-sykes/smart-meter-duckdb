@@ -3,10 +3,15 @@ import duckdb
 import plotly.express as px
 
 ## Load up database
-con = duckdb.connect()
-data_path = 'sample.parquet'
-print("Loading data")
-con.sql(f"CREATE TABLE readings as SELECT * FROM '{data_path}';")
+@st.cache_resource
+def load_database():
+    con = duckdb.connect()
+    data_path = '../readings.parquet'
+    print("Loading data")
+    con.sql(f"CREATE TABLE readings as SELECT * FROM '{data_path}';")
+    return con
+
+con = load_database()
 
 ## App
 st.title('London Smart Meter Profiler')
