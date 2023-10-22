@@ -6,9 +6,9 @@ import plotly.express as px
 @st.cache_resource
 def load_database():
     con = duckdb.connect()
-    data_path = '../readings.parquet'
+    data_path = '../readings'
     print("Loading data")
-    con.sql(f"CREATE TABLE readings as SELECT * FROM '{data_path}';")
+    con.sql(f"IMPORT DATABASE '{data_path}';")
     return con
 
 con = load_database()
