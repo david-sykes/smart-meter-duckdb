@@ -67,10 +67,16 @@ df = con.sql(
     f"SELECT hour(DateTime) as hour, avg(reading_value) as reading FROM readings WHERE LCLid = '{selected_id}' GROUP BY hour(DateTime);"
 ).df()
 
-avg_df = con.sql(
-    f"SELECT hour(DateTime) as hour, avg(reading_value) as reading FROM readings GROUP BY hour(DateTime);"
-).df()
 
+
+@st.cache_data
+def get_avg_hour_df():
+    avg_df = con.sql(
+        f"SELECT hour(DateTime) as hour, avg(reading_value) as reading FROM readings GROUP BY hour(DateTime);"
+    ).df()
+    return avg_df
+
+avg_df = get_avg_hour_df()
 
 hourly_fig = go.Figure()
 
@@ -115,13 +121,18 @@ month_df = con.sql(
                    ORDER BY 2;"""
 ).df()
 
-avg_month_df = con.sql(
-    f"""SELECT monthname(DateTime) as month, 
-                   month(DateTime) as month_num,
-                   sum(reading_value) / count(distinct(LCLid)) as kwh 
-                   FROM readings GROUP BY 1,2 
-                   ORDER BY 2;"""
-).df()
+@st.cache_data
+def get_avg_month_df():
+    avg_month_df = con.sql(
+        f"""SELECT monthname(DateTime) as month, 
+                    month(DateTime) as month_num,
+                    sum(reading_value) / count(distinct(LCLid)) as kwh 
+                    FROM readings GROUP BY 1,2 
+                    ORDER BY 2;"""
+    ).df()
+    return avg_month_df
+
+avg_month_df = get_avg_month_df()
 
 bar_fig = go.Figure()
 bar_fig.add_trace(
